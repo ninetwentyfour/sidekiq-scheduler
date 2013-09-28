@@ -39,11 +39,12 @@ module SidekiqScheduler
     def schedule=(schedule_hash)
       schedule_hash = prepare_schedule(schedule_hash)
 
-      if Sidekiq::Scheduler.dynamic
-        schedule_hash.each do |name, job_spec|
-          set_schedule(name, job_spec)
-        end
+      # if Sidekiq::Scheduler.dynamic
+      schedule_hash.each do |name, job_spec|
+        set_schedule(name, job_spec)
       end
+      reload_schedule!
+      # end
       @schedule = schedule_hash
     end
 

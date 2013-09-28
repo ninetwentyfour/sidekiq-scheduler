@@ -1,10 +1,12 @@
 require 'rufus/scheduler'
+require 'sidekiq/scheduler_locking'
 require 'thwait'
 require 'sidekiq/util'
 require 'sidekiq-scheduler/manager'
 
 module Sidekiq
   class Scheduler
+    extend Sidekiq::SchedulerLocking
     extend Sidekiq::Util
 
     class << self
@@ -33,7 +35,7 @@ module Sidekiq
       logger.info 'Loading Schedule'
 
       # Need to load the schedule from redis for the first time if dynamic
-      Sidekiq.reload_schedule! if dynamic
+      Sidekiq.reload_schedule!
 
       logger.info 'Schedule empty! Set Sidekiq.schedule' if Sidekiq.schedule.empty?
 

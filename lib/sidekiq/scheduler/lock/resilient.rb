@@ -10,11 +10,6 @@ module Sidekiq
             :keys => [key],
             :argv => [value]
           )}.to_i == 1
-          # Sidekiq.redis.evalsha(
-          #   acquire_sha,
-          #   :keys => [key],
-          #   :argv => [value]
-          # ).to_i == 1
         end
 
         def locked?
@@ -23,11 +18,6 @@ module Sidekiq
             :keys => [key],
             :argv => [value]
           )}.to_i == 1
-          # Sidekiq.redis.evalsha(
-          #   locked_sha,
-          #   :keys => [key],
-          #   :argv => [value]
-          # ).to_i == 1
         end
 
       private
@@ -52,22 +42,6 @@ end
 return 0
 EOF
             )}
-#             Sidekiq.redis.script(
-#               :load,
-#               <<-EOF
-# if redis.call('GET', KEYS[1]) == ARGV[1]
-# then
-#   redis.call('EXPIRE', KEYS[1], #{timeout})
-
-#   if redis.call('GET', KEYS[1]) == ARGV[1]
-#   then
-#     return 1
-#   end
-# end
-
-# return 0
-# EOF
-#             )
           end
         end
 
@@ -87,18 +61,6 @@ else
 end
 EOF
             )}
-#             Sidekiq.redis.script(
-#               :load,
-#               <<-EOF
-# if redis.call('SETNX', KEYS[1], ARGV[1]) == 1
-# then
-#   redis.call('EXPIRE', KEYS[1], #{timeout})
-#   return 1
-# else
-#   return 0
-# end
-# EOF
-#             )
           end
         end
       end
